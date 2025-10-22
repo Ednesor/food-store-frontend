@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../../../../global.css">
+</head>
+<body>
+    <main class="login-container">
+        <h1>SuperFood</h1>
+        <h3>Iniciar Sesión</h3>
+
+        <form id="loginForm" method="post">
+            <div class="form-group">
+                <label for="email"> Correo electronico</label>
+                <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="*********" required>
+            </div>
+
+            <button type="submit" class="btn-primary">Iniciar Sesión</button>
+            <p>¿No tienes una cuenta? <a href="../register/register.html">Registrar</a></p>
+        </form>
+        <script type="module" src="./login.ts"></script>
+    </main>
+</body>
+</html>
