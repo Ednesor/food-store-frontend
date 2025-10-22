@@ -1,24 +1,44 @@
+
+// Comentado por que causa que el codigo de abajo no se ejecute
+// import { setupCounter } from './counter.ts'
+
+// document.querySelector<HTMLDivElement>('#app')!.innerHTML = 
+// `
+//   <div>
+
+//   </div>
+// `
+
+// setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { prueba } from "./utils/api";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const button = document.getElementById("button");
+button?.addEventListener("click", () => {
+  prueba();
+});
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+// Si no estás en modo prueba, ejecuta la redirección
+const TEST_MODE = true; // ponelo en false cuando termines
+
+if (!TEST_MODE) {
+  const userData = localStorage.getItem("user");
+
+  if (userData) {
+    try {
+      const user = JSON.parse(userData);
+      if (user.role === "admin") {
+        window.location.href = "./src/pages/admin/adminHome/adminHome.html";
+      } else {
+        window.location.href = "./src/pages/store/home/home.html";
+      }
+    } catch (error) {
+      console.error("Error al leer los datos del usuario:", error);
+      localStorage.removeItem("user");
+      window.location.href = "./src/pages/auth/login/login.html";
+    }
+  } else {
+    window.location.href = "./src/pages/auth/login/login.html";
+  }
+}
