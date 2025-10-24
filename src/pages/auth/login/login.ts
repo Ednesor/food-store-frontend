@@ -1,4 +1,5 @@
 import { saveUser } from "../../../utils/auth";
+import { API_BASE_URL } from "@/config/contants";
 
 const loginForm = document.getElementById('loginForm') as HTMLFormElement;
 
@@ -15,7 +16,8 @@ loginForm.addEventListener('submit', async (event) => {
 
     try {
         // llamada al backend
-        const response = await fetch('http://localhost:8080/api/login', {
+        console.log("API_BASE_URL:", API_BASE_URL);
+        const response = await fetch(`${API_BASE_URL}/users/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
