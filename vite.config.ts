@@ -3,6 +3,24 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    server: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8080',
+                changeOrigin: true,
+                secure: false,
+            },
+        },
+    },
+    resolve: {
+        alias: {
+            '@': resolve(__dirname, './src'),
+            '@/components': resolve(__dirname, './src/components'),
+            '@/pages': resolve(__dirname, './src/pages'),
+            '@/utils': resolve(__dirname, './src/utils'),
+            '@/types': resolve(__dirname, './src/types'),
+        },
+    },
     build: {
         rollupOptions: {
             input: {
