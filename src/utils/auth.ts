@@ -2,7 +2,7 @@ export interface IUser {
     id: number;
     name: string;
     email: string;
-    roles: "Admin" | "User";
+    roles: "ADMIN" | "CLIENTE";
 }
 
 // Guardar usuario en localStorage
