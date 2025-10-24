@@ -1,0 +1,20 @@
+:root {
+  /* Fondos y Superficies */
+  --background-primary: #1e1e1e; /* Negro suave, base para todo */
+  --background-secondary: #2d2d2d; /* Gris oscuro para elementos elevados (cards, modales) */
+  --border-color: #444444;       /* Color sutil para bordes y separadores */
+
+  /* Colores de Texto */
+  --text-primary: #e0e0e0;     /* Blanco suave para el texto principal, fácil de leer */
+  --text-secondary: #a0a0a0;   /* Gris claro para texto secundario, placeholders o info adicional */
+
+  /* Color Primario (Acción Principal) */
+  --primary: #ff6b35;         /* Tu naranja vibrante original, ¡es un buen color! */
+  --primary-hover: #ff8552;    /* Un tono más claro para interactividad (hover, focus) */
+  --text-on-primary: #ffffff; /* Texto blanco para usar sobre el color primario */
+
+  /* Colores de Estado (Feedback para el usuario) */
+  --accent: #2ecc71;          /* Verde para éxito y validación. Claro y universal */
+  --danger: #e74c3c;          /* Rojo para errores. Inconfundible y distinto del naranja */
+  --warning: #f39c12;         /* Amarillo/naranja para advertencias o alertas */
+}
