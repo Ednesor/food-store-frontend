@@ -15,14 +15,13 @@
     "noEmit": true,
     "isolatedModules": true,
 
-    /* Path mapping */
-    "baseUrl": ".",
+/* Path mapping */
     "paths": {
-      "@/*": ["src/*"],
-      "@/components/*": ["src/components/*"],
-      "@/pages/*": ["src/pages/*"],
-      "@/utils/*": ["src/utils/*"],
-      "@/types/*": ["src/types/*"]
+      "@/*": ["./src/*"],
+      "@/components/": ["./src/components/"],
+      "@/pages/": ["./src/pages/"],
+      "@/utils/": ["./src/utils/"],
+      "@/types/": ["./src/types/"]
     },
 
     /* Additional options */
