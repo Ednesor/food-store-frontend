@@ -20,7 +20,7 @@ button?.addEventListener("click", () => {
 });
 
 // Si no estás en modo prueba, ejecuta la redirección
-const TEST_MODE = true; // ponelo en false cuando termines
+const TEST_MODE = false; // ponelo en false cuando termines
 
 if (!TEST_MODE) {
   const userData = localStorage.getItem("user");
