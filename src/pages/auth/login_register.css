@@ -1,0 +1,114 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background-color: var(--background-primary);
+    color: var(--text-primary);                  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* ====== FORM CONTAINERS ====== */
+.login-container,
+.register-container {
+    background-color: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    padding: 40px 30px;
+    border-radius: 16px;
+    max-width: 420px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+/* ====== TITULOS ====== */
+h1 {
+    color: var(--primary); 
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+h3 {
+    color: var(--text-secondary); 
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* ====== FORM ====== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    text-align: left;
+}
+
+label {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+input:focus {
+    border: 2px solid var(--primary);
+    background-color: #404751;
+}
+
+/* ====== BOTÓN PRINCIPAL ====== */
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--text-on-primary);
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+/* ====== MENSAJES Y LINKS ====== */
+p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+a {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+/* ====== ANIMACIONES ====== */
+@keyframes fadeIn {
+    from {
+    opacity: 0;
+    transform: translateY(-15px);
+    }
+    to {
+    opacity: 1;
+    transform: translateY(0);
+    }
+}
