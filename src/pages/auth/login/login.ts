@@ -1,5 +1,5 @@
+import { loginUser } from "@/utils/api";
 import { saveUser } from "../../../utils/auth";
-import { API_BASE_URL } from "@/config/contants";
 
 const loginForm = document.getElementById('loginForm') as HTMLFormElement;
 
@@ -15,32 +15,16 @@ loginForm.addEventListener('submit', async (event) => {
     }
 
     try {
-        // llamada al backend
-        console.log("API_BASE_URL:", API_BASE_URL);
-        const response = await fetch(`${API_BASE_URL}/users/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password }),
-        });
-
-        if (!response.ok) {
-            alert('Crenciales inválidas. Intente de nuevo.');
-            return;
-        }
-
-        // Convertimos la respuesta del backend a objeto JSON
-        const userData = await response.json();
+        const userData = await loginUser(email, password);
 
         // Guardamos el usuario en localStorage
         saveUser(userData);
 
         // Redirigimos segun su rol
-        if (userData.roles === 'Admin') {
-            window.location.href = '/src/pages/admin/adminHome/adminHome.html';
+        if (userData.roles === 'ADMIN') {
+            window.location.href = '../../admin/adminHome/adminHome.html';
         } else {
-            window.location.href = '/src/pages/store/home/home.html';
+            window.location.href = '../../store/home/home.html';
         }
     } catch (error) {
         console.error("Error en login:", error);
