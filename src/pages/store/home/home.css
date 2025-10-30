@@ -1,0 +1,279 @@
+/* 
+=========================================================
+    HOME STORE (Cliente/Admin vista principal)
+========================================================= *
+/
+
+/* ========== RESET GENERAL ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 
+=========================================================
+    HEADER SUPERIOR
+========================================================= 
+*/
+.menu-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 24px;
+}
+
+.menu-title {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-menu a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: var(--primary);
+}
+
+.user-display {
+    color: var(--accent);
+    font-weight: 500;
+}
+
+#logout-btn {
+    background-color: var(--primary);
+    color: var(--text-on-primary);
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#logout-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* 
+=========================================================
+    LAYOUT PRINCIPAL
+========================================================= 
+*/
+.page-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* 
+=========================================================
+    SIDEBAR DE CATEGORÍAS
+========================================================= 
+*/
+.sidebar-container {
+    width: 220px;
+    background-color: var(--background-secondary);
+    border-right: 1px solid var(--border-color);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-container h3 {
+    color: var(--primary);
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.sidebar-container p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+}
+
+.category-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.category-list li {
+    background: none;
+    color: var(--text-secondary);
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+
+.category-list li:hover {
+    background-color: var(--primary-hover);
+    color: var(--text-on-primary);
+}
+
+.category-list li.active {
+    background-color: var(--primary);
+    color: var(--text-on-primary);
+}
+
+/* 
+=========================================================
+    CONTENIDO PRINCIPAL
+========================================================= 
+*/
+.main-content {
+    flex: 1;
+    padding: 20px 30px;
+    background-color: var(--background-content);
+    /* un poco más claro que el fondo base */
+    overflow-y: auto;
+}
+
+/* ======== TOOLBAR ======== */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.search-bar {
+    width: 40%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+}
+
+.search-bar::placeholder {
+    color: var(--text-secondary);
+}
+
+.sort-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sort-select {
+    background-color: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+/* ======== TÍTULO Y CONTADOR ======== */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+#content-title {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+
+.product-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* ======== GRID DE PRODUCTOS ======== */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* 
+=========================================================
+    TARJETAS DE PRODUCTOS
+========================================================= 
+*/
+.product-card {
+    background-color: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.product-card .info {
+    padding: 12px;
+}
+
+.product-card h4 {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-bottom: 6px;
+}
+
+.product-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.price {
+    color: var(--price-color);
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 6px;
+}
+
+.status-available {
+    background-color: var(--available-bg);
+    color: var(--available-text);
+}
+
+.status-unavailable {
+    background-color: var(--unavailable-bg);
+    color: var(--unavailable-text);
+}
