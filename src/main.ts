@@ -10,8 +10,6 @@
 // `
 
 // setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
-
-import './style.css'
 import { prueba } from "./utils/api";
 
 const button = document.getElementById("button");
@@ -28,7 +26,7 @@ if (!TEST_MODE) {
   if (userData) {
     try {
       const user = JSON.parse(userData);
-      if (user.role === "admin") {
+      if (user.role === "ADMIN") {
         window.location.href = "./src/pages/admin/adminHome/adminHome.html";
       } else {
         window.location.href = "./src/pages/store/home/home.html";
