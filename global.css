@@ -1,20 +1,64 @@
 :root {
+  /* ============================================= */
+  /* =========== PALETA DE COLORES BASE ========== */
+  /* ============================================= */
+
   /* Fondos y Superficies */
-  --background-primary: #1e1e1e; /* Negro suave, base para todo */
-  --background-secondary: #2d2d2d; /* Gris oscuro para elementos elevados (cards, modales) */
-  --border-color: #444444;       /* Color sutil para bordes y separadores */
+  --background-primary: #1e1e1e;   /* Base para toda la app */
+  --background-secondary: #2d2d2d; /* Para cards, modales, contenedores */
+  --background-content: #252525;
+  --border-color: #444444;         /* Bordes y separadores sutiles */
 
   /* Colores de Texto */
-  --text-primary: #e0e0e0;     /* Blanco suave para el texto principal, fácil de leer */
-  --text-secondary: #a0a0a0;   /* Gris claro para texto secundario, placeholders o info adicional */
+  --text-primary: #e0e0e0;         /* Texto principal y títulos */
+  --text-secondary: #a0a0a0;       /* Texto secundario, placeholders */
 
   /* Color Primario (Acción Principal) */
-  --primary: #ff6b35;         /* Tu naranja vibrante original, ¡es un buen color! */
-  --primary-hover: #ff8552;    /* Un tono más claro para interactividad (hover, focus) */
-  --text-on-primary: #ffffff; /* Texto blanco para usar sobre el color primario */
+  --primary: #ff6b35;             /* Botones principales, links, acentos */
+  --primary-hover: #ff8552;        /* Hover para el color primario */
+  --text-on-primary: #ffffff;      /* Texto para usar sobre fondos primarios */
 
-  /* Colores de Estado (Feedback para el usuario) */
-  --accent: #2ecc71;          /* Verde para éxito y validación. Claro y universal */
-  --danger: #e74c3c;          /* Rojo para errores. Inconfundible y distinto del naranja */
-  --warning: #f39c12;         /* Amarillo/naranja para advertencias o alertas */
+  /* Colores de Estado Generales (Feedback) */
+  --accent: #2ecc71;               /* Éxito, validación, confirmación */
+  --danger: #e74c3c;               /* Error, eliminar, peligro */
+  --warning: #f39c12;              /* Advertencias, pedidos pendientes */
+
+
+  /* ============================================= */
+  /* ===== VARIABLES PARA LA TIENDA (CLIENTE) ==== */
+  /* ============================================= */
+
+  /* Productos y Precios */
+  --price-color: var(--accent);
+  --sale-badge-bg: var(--danger);
+  --text-on-badge: #ffffff;
+
+  /* Estados de Disponibilidad */
+  --available-bg: rgba(46, 204, 113, 0.15);
+  --available-text: var(--accent);
+  --unavailable-bg: rgba(231, 76, 60, 0.15);
+  --unavailable-text: var(--danger);
+
+
+  /* ============================================= */
+  /* ===== VARIABLES PARA EL PANEL DE ADMIN ====== */
+  /* ============================================= */
+
+  /* Colores para el Dashboard */
+  --admin-card-1: #8e44ad; /* Púrpura */
+  --admin-card-2: #2980b9; /* Azul */
+  --admin-card-3: #27ae60; /* Verde mar */
+  --admin-card-4: #d35400; /* Naranja oscuro */
+
+  /* Colores para acciones en Tablas (CRUD) */
+  --btn-edit-bg: #3498db;
+  --btn-edit-hover: #5dade2;
+  --btn-delete-bg: var(--danger);
+  --btn-delete-hover: #e66b5b;
+
+  /* Colores para estados de pedidos en el Admin */
+  --status-pending: var(--warning);
+  --status-processing: var(--btn-edit-bg);
+  --status-completed: var(--accent);
+  --status-cancelled: var(--danger);
 }
