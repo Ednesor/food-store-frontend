@@ -1,5 +1,6 @@
+import { registerUser } from "@/utils/api";
 import { saveUser } from "../../../utils/auth";
-import { API_BASE_URL } from "@/config/contants";
+import type { IRegister } from "@/types/IRegister";
 
 //Capturar el name, email y password del formulario de registro
 const registerForm = document.getElementById('registerForm') as HTMLFormElement;
@@ -44,23 +45,13 @@ registerForm.addEventListener('submit', async (event) => {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/users/signup`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, lastname, username, email, password }),
-        });
-
-        if (!response.ok) {
-            alert("Error al registrar. Verifica los datos.");
-            return;
-        }
-
-        const userData = await response.json();
+        const registerData: IRegister = { name, lastname, username, email, password };
+        const userData = await registerUser(registerData);
 
         // Guardar el usuario en localStorage
         saveUser(userData);
         // Redigimos al home del cliente
-        window.location.href = '/src/pages/store/home/home.html';
+        window.location.href = '../../store/home/home.html';
 
     } catch (error) {
         console.error("Error en el registro:", error);
