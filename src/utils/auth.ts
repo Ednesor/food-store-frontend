@@ -1,9 +1,4 @@
-export interface IUser {
-    id: number;
-    name: string;
-    email: string;
-    roles: "ADMIN" | "CLIENTE";
-}
+import type { IUser } from "../types/IUser";
 
 // Guardar usuario en localStorage
 export function saveUser(user: IUser): void {
