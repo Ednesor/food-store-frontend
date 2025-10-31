@@ -1,0 +1,35 @@
+/*
+=========================================================
+    ADMIN - PRODUCTS (Estilos específicos)
+========================================================= 
+*/
+
+/* Badge para el estado (Activo/Inactivo) */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+}
+
+.status-active {
+    background-color: var(--accent); /* Verde */
+}
+
+.status-inactive {
+    background-color: var(--danger); /* Rojo */
+}
+
+/* Contenedor para el checkbox en el modal */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Le quitamos el ancho al input de tipo checkbox para que no ocupe toda la línea */
+.checkbox-container input[type="checkbox"] {
+    width: auto;
+}
