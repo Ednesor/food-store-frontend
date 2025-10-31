@@ -1,15 +1,3 @@
-
-// Comentado por que causa que el codigo de abajo no se ejecute
-// import { setupCounter } from './counter.ts'
-
-// document.querySelector<HTMLDivElement>('#app')!.innerHTML = 
-// `
-//   <div>
-
-//   </div>
-// `
-
-// setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
 import { prueba } from "./utils/api";
 
 const button = document.getElementById("button");
@@ -27,16 +15,16 @@ if (!TEST_MODE) {
     try {
       const user = JSON.parse(userData);
       if (user.role === "ADMIN") {
-        window.location.href = "./src/pages/admin/adminHome/adminHome.html";
+        window.location.href = "/src/pages/admin/adminHome/adminHome.html"; 
       } else {
-        window.location.href = "./src/pages/store/home/home.html";
+        window.location.href = "/src/pages/store/home/home.html"; 
       }
     } catch (error) {
       console.error("Error al leer los datos del usuario:", error);
       localStorage.removeItem("user");
-      window.location.href = "./src/pages/auth/login/login.html";
+      window.location.href = "/src/pages/auth/login/login.html"; 
     }
   } else {
-    window.location.href = "./src/pages/auth/login/login.html";
+    window.location.href = "/src/pages/auth/login/login.html"; 
   }
 }
