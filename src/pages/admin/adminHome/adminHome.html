@@ -1,14 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdminHome</title>
+    <title>Panel de Administración | SuperFood</title>
+    <link rel="stylesheet" href="../../../../global.css">
 </head>
+
 <body>
-    <header></header>
-    <main>
-        <script type="module" src="./adminHome.ts"></script>
-    </main>
+    <header class="menu-container">
+        <h1 class="menu-title">🍽️ SuperFood</h1>
+        <nav class="nav-menu">
+            <a href="../../store/home/home.html">Tienda</a>
+            <a href="#">Panel Admin</a>
+            <span id="user-display" class="user-display"></span>
+            <a id="logout-btn" href="#">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <div class="admin-page-container">
+        <aside class="admin-sidebar">
+            <h2>Administración</h2>
+            <p>Panel de control</p>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#">📊 Dashboard</a></li>
+                    <li><a href="../categories/categories.html">📂 Categorías</a></li>
+                    <li><a href="../products/products.html">🍔 Productos</a></li>
+                    <li><a href="../orders/orders.html">📦 Pedidos</a></li>
+                    <li class="separator"></li>
+                    <li><a href="../../store/home/home.html">🏪 Ver Tienda</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main-content">
+            <h1>Panel de Administración</h1>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>📂 Categorías</h3>
+                    <span id="category-count" class="stat-value">0</span>
+                    <a href="../categories/categories.html" class="manage-btn">Gestionar</a>
+                </div>
+                <div class="stat-card">
+                    <h3>🍔 Productos</h3>
+                    <span id="product-count" class="stat-value">0</span>
+                    <a href="../products/products.html" class="manage-btn">Gestionar</a>
+                </div>
+                <div class="stat-card">
+                    <h3>📦 Pedidos</h3>
+                    <span id="order-count" class="stat-value">0</span>
+                    <a href="../orders/orders.html" class="manage-btn">Gestionar</a>
+                </div>
+                <div class="stat-card">
+                    <h3>✅ Disponibles</h3>
+                    <span id="available-products-count" class="stat-value">0</span>
+                    <p class="description">Productos activos</p>
+                </div>
+            </div>
+
+            <div class="summary-panel">
+                <h2>Resumen Rápido</h2>
+                <p id="summary-text">Cargando estadísticas...</p>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="./adminHome.ts"></script>
 </body>
+
 </html>
