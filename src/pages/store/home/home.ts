@@ -1,15 +1,13 @@
 import type { ICategoria } from "@/types/ICategoria";
 import type { IProduct } from "@/types/IProduct";
 import { getCategories, getProducts } from "@/utils/api"
+import { setupClientAuth } from "@/utils/auth";
 
 /*
 ==============================
     REFERENCIAS AL DOM
 ==============================
 */
-const userDisplay = document.getElementById("user-display");
-const adminLink = document.getElementById("admin-link");
-const logoutBtn = document.getElementById("logout-btn");
 const categoryList = document.getElementById("category-list") as HTMLUListElement;
 const productGrid = document.getElementById("product-grid") as HTMLDivElement;
 const productCount = document.getElementById("product-count") as HTMLSpanElement;
@@ -35,32 +33,9 @@ let allCategories: ICategoria[] = [];
 document.addEventListener("DOMContentLoaded", initializeApp);
 
 async function initializeApp() {
-    setupAuth();
+    setupClientAuth();
     await loadAndRenderInitialData();
     setupEventListeners();
-}
-
-/*
-==============================
-    1. LÓGICA DE AUTENTICACIÓN
-==============================
-*/
-function setupAuth() {
-    const userSession = localStorage.getItem('user');
-    if (userSession) {
-        const user = JSON.parse(userSession);
-        if (userDisplay) userDisplay.textContent = `${user.name} ${user.lastname}`;
-        if (adminLink && user.role !== 'ADMIN') adminLink.style.display = 'none';
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', (event) => {
-                event.preventDefault();
-                localStorage.removeItem('user');
-                window.location.href = '../../auth/login/login.html';
-            });
-        }
-    } else {
-        window.location.href = '../../auth/login/login.html';
-    }
 }
 
 /*
@@ -70,31 +45,37 @@ function setupAuth() {
 */
 // Carga productos y categorías en paralelo desde la API y los muestra en pantalla.
 async function loadAndRenderInitialData() {
-    try {
-        const [categories, products] = await Promise.all([
-            getCategories(),
-            getProducts(),
-        ]);
+    // Usamos Promise.allSettled para que una petición fallida no cancele la otra.
+    const results = await Promise.allSettled([
+        getCategories(),
+        getProducts(),
+    ]);
 
-        // // --- USA LOS DATOS MOCK EN SU LUGAR ---
-        // console.log(" MODO DE PRUEBA: Usando datos mock locales. ");
-        // const [categories, products] = await Promise.all([
-        //     Promise.resolve(mockCategories),
-        //     Promise.resolve(mockProducts),
-        // ]);
-
-        // Guarda los datos en las variables globales.
-        allCategories = categories;
-        allProducts = products;
-
-        // Llama a las funciones para dibujar los datos en la UI.
+    // Verificamos el resultado de las CATEGORÍAS
+    const categoriesResult = results[0];
+    if (categoriesResult.status === 'fulfilled') {
+        // Si la promesa se cumplió, usamos su valor.
+        allCategories = categoriesResult.value;
         renderCategories(allCategories);
-        applyFiltersAndRender();
-
-    } catch (error) {
-        console.error("❌ Error al cargar datos iniciales:", error);
-        productGrid.innerHTML = `<p style="color: var(--danger)">No se pudieron cargar los productos. Revisa la consola para más detalles.</p>`;
+    } else {
+        // Si la promesa falló, mostramos el error específico.
+        console.error("Error al cargar categorías:", categoriesResult.reason);
+        categoryList.innerHTML = `<li style="color: var(--danger)">Error al cargar</li>`;
     }
+
+    // Verificamos el resultado de los PRODUCTOS
+    const productsResult = results[1];
+    if (productsResult.status === 'fulfilled') {
+        // Si la promesa se cumplió, usamos su valor.
+        allProducts = productsResult.value;
+    } else {
+        // Si la promesa falló, mostramos el error específico.
+        console.error("Error al cargar productos:", productsResult.reason);
+        productGrid.innerHTML = `<p style="color: var(--danger)">No se pudieron cargar los productos.</p>`;
+    }
+
+    // Al final, llamamos a la función de renderizado.
+    applyFiltersAndRender();
 }
 
 /*
@@ -107,13 +88,13 @@ function setupEventListeners() {
     searchBar.addEventListener("input", applyFiltersAndRender);
     sortSelect.addEventListener("change", applyFiltersAndRender);
 
-    // Usa delegación de eventos para manejar clics en las categorías.
     categoryList.addEventListener("click", (event) => {
-        const target = event.target as HTMLElement;
-        if (target.tagName === "LI") {
+        const clickedLi = (event.target as HTMLElement).closest('li');
+
+        if (clickedLi) {
             categoryList.querySelector(".active")?.classList.remove("active");
-            target.classList.add("active");
-            contentTitle.textContent = target.textContent || "Todos los Productos";
+            clickedLi.classList.add("active");
+            contentTitle.textContent = clickedLi.textContent?.trim() || "Todos los Productos";
             applyFiltersAndRender();
         }
     });
@@ -126,26 +107,22 @@ function setupEventListeners() {
 */
 // Orquesta el filtrado, búsqueda y ordenamiento de productos antes de renderizarlos.
 function applyFiltersAndRender() {
-    // 1. Inicia con la lista completa de productos.
     let filteredProducts = [...allProducts];
 
-    // 2. Aplica el filtro de categoría activa.
     const activeCategoryElement = categoryList.querySelector("li.active") as HTMLLIElement;
     if (activeCategoryElement && activeCategoryElement.dataset.id) {
         const categoryId = parseInt(activeCategoryElement.dataset.id, 10);
-        filteredProducts = filteredProducts.filter(p => p.categoriaId === categoryId);
+        filteredProducts = filteredProducts.filter(p => p.categoria.id === categoryId);
     }
 
-    // 3. Aplica el filtro por texto de búsqueda.
     const searchQuery = searchBar.value.toLowerCase().trim();
     if (searchQuery) {
         filteredProducts = filteredProducts.filter(p =>
             p.nombre.toLowerCase().includes(searchQuery) ||
-            p.categoria.toLowerCase().includes(searchQuery)
+            p.categoria.nombre.toLowerCase().includes(searchQuery)
         );
     }
 
-    // 4. Aplica el criterio de ordenamiento seleccionado.
     const sortValue = sortSelect.value;
     switch (sortValue) {
         case "price-asc": filteredProducts.sort((a, b) => a.precio - b.precio); break;
@@ -154,7 +131,6 @@ function applyFiltersAndRender() {
         case "name-desc": filteredProducts.sort((a, b) => b.nombre.localeCompare(a.nombre)); break;
     }
 
-    // 5. Renderiza el resultado final en el DOM.
     renderProducts(filteredProducts);
 }
 
@@ -173,8 +149,15 @@ function renderCategories(categories: ICategoria[]): void {
 
     categories.forEach((cat) => {
         const li = document.createElement("li");
-        li.textContent = cat.nombre;
         li.dataset.id = String(cat.id);
+        li.innerHTML = `
+            <img 
+                src="${cat.urlImagen || 'https://via.placeholder.com/32.png?text=S/I'}" 
+                alt="${cat.nombre}" 
+                class="category-image"
+            >
+            <span class="category-name">${cat.nombre}</span>
+        `;
         categoryList.appendChild(li);
     });
 }
@@ -196,43 +179,17 @@ function renderProducts(productsToRender: IProduct[]): void {
         <img src="${p.urlImagen || "https://via.placeholder.com/300x200.png?text=Sin+Imagen"}" alt="${p.nombre}">
         <div class="info">
             <h4>${p.nombre}</h4>
-            <p class="desc">${p.categoria ?? "Sin categoría"}</p>
+            <p class="desc">${p.categoria?.nombre ?? "Sin categoría"}</p>
             <span class="price">$${p.precio.toFixed(2)}</span>
-            <span class="status-badge ${p.estado ? "status-available" : "status-unavailable"}">
-                ${p.estado ? "Disponible" : "Agotado"}
+            <span class="status-badge ${p.activo ? "status-available" : "status-unavailable"}">
+                ${p.activo ? "Disponible" : "Agotado"}
             </span>
         </div>
     `;
         card.addEventListener("click", () => {
-            window.location.href = `../productDetail/productDetail.html?id=${p.id}`;
+            // Esto llevará a una página de detalle de producto
+            // window.location.href = `../productDetail/productDetail.html?id=${p.id}`;
         });
         productGrid.appendChild(card);
     });
 }
-
-
-
-// =========================================================
-// =================== MOCK DATA (PARA PRUEBAS) ============
-// =========================================================
-
-// const mockCategories: ICategoria[] = [
-//     { id: 1, nombre: "Pizzas", descripcion: "Las mejores pizzas artesanales.", urlImagen: "..." },
-//     { id: 2, nombre: "Hamburguesas", descripcion: "Hamburguesas caseras con carne premium.", urlImagen: "..." },
-//     { id: 3, nombre: "Bebidas", descripcion: "Gaseosas, aguas y jugos.", urlImagen: "..." },
-//     { id: 4, nombre: "Postres", descripcion: "El toque dulce para terminar tu comida.", urlImagen: "..." }
-// ];
-
-
-
-// const mockProducts: IProduct[] = [
-//     { id: 101, urlImagen: "https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg", nombre: "Pizza Muzzarella", precio: 3200.00, categoria: "Pizzas", stock: 15, estado: true, categoriaId: 1 },
-//     { id: 102, urlImagen: "https://images.pexels.com/photos/845811/pexels-photo-845811.jpeg", nombre: "Pizza Napolitana", precio: 3500.00, categoria: "Pizzas", stock: 10, estado: true, categoriaId: 1 },
-//     { id: 103, urlImagen: "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg", nombre: "Hamburguesa Clásica", precio: 2800.00, categoria: "Hamburguesas", stock: 20, estado: true, categoriaId: 2 },
-//     { id: 104, urlImagen: "https://images.pexels.com/photos/2282532/pexels-photo-2282532.jpeg", nombre: "Hamburguesa Doble Cheddar", precio: 3400.00, categoria: "Hamburguesas", stock: 0, estado: false, categoriaId: 2 },
-//     { id: 106, urlImagen: "https://images.pexels.com/photos/416528/pexels-photo-416528.jpeg", nombre: "Agua sin Gas 500ml", precio: 600.00, categoria: "Bebidas", stock: 40, estado: true, categoriaId: 3 },
-//     // 👇 ESTE PRODUCTO NO TIENE IMAGEN PARA PROBAR EL FALLBACK
-//     { id: 107, urlImagen: "", nombre: "Flan Casero", precio: 1200.00, categoria: "Postres", stock: 12, estado: true, categoriaId: 4 },
-//     { id: 108, urlImagen: "https://images.pexels.com/photos/14101389/pexels-photo-14101389.jpeg", nombre: "Pizza Fugazzeta", precio: 3600.00, categoria: "Pizzas", stock: 8, estado: true, categoriaId: 1 },
-//     { id: 109, urlImagen: "https://images.pexels.com/photos/1269033/pexels-photo-1269033.jpeg", nombre: "Cerveza Lager 1L", precio: 1500.00, categoria: "Bebidas", stock: 0, estado: false, categoriaId: 3 }
-// ];
