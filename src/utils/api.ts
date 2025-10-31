@@ -26,87 +26,143 @@ export async function prueba() {
     FUNCION GENERICA PARA HACER REQUESTS
 ==============================================
 */
-export async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const BASE_URL = API_BASE_URL;
-    const url = `${BASE_URL}${endpoint}`;
-    console.log("➡️ Haciendo request a:", url);
+async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+    const url = `${API_BASE_URL}${endpoint}`;
+    console.log(`➡️ Request: ${options.method || 'GET'} ${url}`);
 
     try {
-        const res = await fetch(url, {
+        const response = await fetch(url, {
             headers: { "Content-Type": "application/json" },
             ...options,
         });
 
-        console.log("🔁 Response status:", res.status);
-
         // Si el servidor no responde OK (200–299)
-        if (!res.ok) {
-            const text = await res.text();
-            console.error("❌ Error HTTP:", res.status, text);
-            throw new Error(`Error ${res.status}: ${text}`);
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`❌ Error HTTP ${response.status}:`, errorText);
+            throw new Error(`Error del servidor: ${errorText || response.statusText}`);
         }
 
-        // Intentamos parsear JSON
-        const text = await res.text();
-        console.log("📦 Raw response:", text);
-
-        try {
-            const json = JSON.parse(text);
-            console.log("✅ JSON parseado:", json);
-            return json;
-        } catch (err) {
-            console.warn("⚠️ No se pudo parsear JSON:", err);
-            throw new Error("Respuesta no JSON del servidor");
+        // Si la respuesta es 204 (No Content), simplemente retornamos null
+        if (response.status === 204) {
+            return null as T;
         }
+        
+        const responseText = await response.text();
+
+        if (responseText) {
+            try {
+                // Intentamos parsear como JSON
+                return JSON.parse(responseText) as T;
+            } catch (e) {
+                console.log("Respuesta no es JSON, pero la petición fue exitosa:", responseText);
+                return null as T;
+            }
+        }
+        return null as T;
+
     } catch (error) {
-        if (error instanceof Error) {
-            console.error("🔥 Error general en request():", error.message);
-        } else {
-            console.error("🔥 Error inesperado y de tipo desconocido:", String(error));
-        }
+        console.error("🔥 Error en la función request:", error);
         throw error;
     }
 }
-
 
 /*
 ==============================
     METODOS DE AUTH
 ==============================
 */
-export async function loginUser(email: string, password: string): Promise<IUser> {
+export function loginUser(email: string, password: string): Promise<IUser> {
     return request<IUser>("/users/login", {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
     });
 }
 
-export async function registerUser(data: IRegister): Promise<IUser> {
+export function registerUser(data: IRegister): Promise<IUser> {
     return request<IUser>("/users/signup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
     });
 }
 
 /*
 =========================================================
-    MÉTODOS PARA OBTENER DATOS DEL CATÁLOGO
+    MÉTODOS DEL CATÁLOGO
 =========================================================
 */
-
-/*
- * Obtiene todas las categorías desde el backend.
- * El método es GET por defecto en nuestra función 'request'.
-*/
-export async function getCategories(): Promise<ICategoria[]> {
+export function getCategories(): Promise<ICategoria[]> {
     return request<ICategoria[]>("/categorias");
 }
 
-/*
- * Obtiene todos los productos desde el backend.
-*/
-export async function getProducts(): Promise<IProduct[]> {
+export function getProducts(): Promise<IProduct[]> {
     return request<IProduct[]>("/productos");
+}
+
+/*
+=========================================================
+    MÉTODOS PARA CRUD DE CATEGORÍAS
+=========================================================
+*/
+type CategoryData = Omit<ICategoria, 'id'>;
+
+export function createCategory(data: CategoryData): Promise<ICategoria> {
+    return request<ICategoria>("/categorias", {
+        method: "POST",
+        body: JSON.stringify(data),
+    });
+}
+
+export function updateCategory(id: number, data: CategoryData): Promise<ICategoria> {
+    return request<ICategoria>(`/categorias/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+    });
+}
+
+export function deleteCategory(id: number): Promise<void> {
+    return request<void>(`/categorias/${id}`, {
+        method: "DELETE",
+    });
+}
+
+/*
+=========================================================
+    MÉTODOS PARA CRUD DE PRODUCTOS
+=========================================================
+*/
+// Usamos un tipo para los datos de creación/actualización de productos
+type ProductData = {
+    nombre: string;
+    descripcion: string;
+    precio: number;
+    stock: number;
+    categoriaId: number;
+    urlImagen: string;
+};
+
+export function createProduct(data: ProductData): Promise<IProduct> {
+    return request<IProduct>("/productos", {
+        method: "POST",
+        body: JSON.stringify(data),
+    });
+}
+
+export function updateProduct(id: number, data: ProductData): Promise<IProduct> {
+    return request<IProduct>(`/productos/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+    });
+}
+
+export function updateProductStatus(id: number): Promise<IProduct> {
+    return request<IProduct>(`/productos/status/${id}`, {
+        method: "PUT",
+    });
+}
+
+export function deleteProduct(id: number): Promise<void> {
+    return request<void>(`/productos/${id}`, {
+        method: "DELETE",
+    });
 }
