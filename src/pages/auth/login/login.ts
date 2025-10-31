@@ -21,7 +21,7 @@ loginForm.addEventListener('submit', async (event) => {
         saveUser(userData);
 
         // Redirigimos segun su rol
-        if (userData.roles === 'ADMIN') {
+        if (userData.role === 'ADMIN') {
             window.location.href = '../../admin/adminHome/adminHome.html';
         } else {
             window.location.href = '../../store/home/home.html';
