@@ -1,10 +1,12 @@
+import type { ICategoria } from "./ICategoria";
+
 export interface IProduct {
     id: number;
-    urlImagen: string;
     nombre: string;
+    descripcion: string;
     precio: number;
-    categoria: string;
+    urlImagen: string;
     stock: number;
-    estado: boolean;
-    categoriaId: number; // Relación con la categoría
+    activo: boolean;
+    categoria: ICategoria;
 }
