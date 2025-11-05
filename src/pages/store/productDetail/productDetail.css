@@ -1,0 +1,161 @@
+/*
+=========================================================
+    PRODUCT DETAIL (Vista Cliente)
+=========================================================
+*/
+.page-container {
+    padding: 40px 30px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* 
+=========================================================
+    ESTRUCTURA PRINCIPAL DEL DETALLE
+========================================================= 
+*/
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background-color: var(--background-secondary);
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    width: 100%;
+    max-width: 1200px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 
+=========================================================
+    SECCIÓN DE IMAGEN
+========================================================= 
+*/
+.image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 
+=========================================================
+    SECCIÓN DE INFORMACIÓN
+========================================================= 
+*/
+.info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-container .category-name {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.info-container h2 {
+    color: var(--text-primary);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.2;
+}
+
+.info-container .price {
+    color: var(--primary);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.info-container .status-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.info-container .description {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+/* 
+=========================================================
+    SECCIÓN DE ACCIONES (CANTIDAD Y BOTONES)
+========================================================= 
+*/
+.actions-container {
+    border-top: 1px solid var(--border-color);
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.actions-container .stock {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Botones de acción */
+.actions-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.actions-buttons .btn {
+    flex: 1;
+    padding: 14px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.actions-buttons .btn-primary {
+    flex: 2;
+}
+
+.actions-buttons .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.actions-buttons .btn-primary:disabled:hover {
+    background-color: var(--primary);
+}
+
+/* 
+=========================================================
+    ESTADO DE CARGA Y ERROR
+========================================================= 
+*/
+.loading {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    padding: 40px;
+}
