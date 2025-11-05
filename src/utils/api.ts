@@ -141,6 +141,10 @@ type ProductData = {
     urlImagen: string;
 };
 
+export function getProductById(id: number): Promise<IProduct> {
+    return request<IProduct>(`/productos/${id}`);
+}
+
 export function createProduct(data: ProductData): Promise<IProduct> {
     return request<IProduct>("/productos", {
         method: "POST",
