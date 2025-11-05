@@ -152,22 +152,3 @@
     font-weight: bold;
     font-size: 1rem;
 }
-
-.status-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    margin-top: 6px;
-}
-
-.status-available {
-    background-color: var(--available-bg);
-    color: var(--available-text);
-}
-
-.status-unavailable {
-    background-color: var(--unavailable-bg);
-    color: var(--unavailable-text);
-}
