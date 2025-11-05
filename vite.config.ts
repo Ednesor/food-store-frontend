@@ -32,6 +32,7 @@ export default defineConfig({
                 register: resolve(__dirname, 'src/pages/auth/register/register.html'),
                 adminHome: resolve(__dirname, 'src/pages/admin/adminHome/adminHome.html'),
                 storeHome: resolve(__dirname, 'src/pages/store/home/home.html'),
+                productDetail: resolve(__dirname, 'src/pages/store/productDetail/productDetail.html')
             },
         },
     },
