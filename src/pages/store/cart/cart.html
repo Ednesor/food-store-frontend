@@ -1,11 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mi Carrito | SuperFood</title>
+    <link rel="stylesheet" href="../../../../global.css">
+    <link rel="stylesheet" href="./cart.css">
 </head>
+
 <body>
-    
+    <header class="menu-container">
+        <h1 class="menu-title">🍽️ SuperFood</h1>
+        <nav class="nav-menu">
+            <a href="/src/pages/store/home/home.html">Inicio</a>
+            <a href="/src/pages/client/orders/orders.html">Mis Pedidos</a>
+            <a href="/src/pages/store/cart/cart.html" class="nav-cart-link">
+                Carrito
+                <span id="cart-badge" class="cart-badge hidden">0</span>
+            </a>
+            <span id="user-display" class="user-display"></span>
+            <a id="admin-link" href="/src/pages/admin/adminHome/adminHome.html">Administración</a>
+            <a id="logout-btn" href="#">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <main class="page-container">
+        <h1>Mi Carrito</h1>
+
+        <div class="cart-layout" id="cart-container">
+            <section id="cart-items-list" class="cart-items-container">
+                <p>Cargando carrito...</p>
+            </section>
+
+            <aside id="cart-summary" class="cart-summary">
+                <h2>Resumen del Pedido</h2>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="summary-subtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Envío</span>
+                    <span id="summary-shipping">$0.00</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span id="summary-total">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="btn btn-primary" disabled>Proceder al Pago</button>
+                <button id="clear-cart-btn" class="btn btn-danger" disabled>Vaciar Carrito</button>
+            </aside>
+        </div>
+
+        <div id="empty-cart-message" class="empty-cart hidden">
+            <p>Tu carrito está vacío.</p>
+            <a href="/src/pages/store/home/home.html" class="btn btn-primary">Volver a la tienda</a>
+        </div>
+
+        <div id="checkout-modal" class="modal hidden">
+            <div class="modal-content">
+                <button type="button" id="close-modal-btn" class="modal-close-btn">&times;</button>
+                <h2 id="modal-title">Completar Pedido</h2>
+
+                <form id="checkout-form">
+                    <div class="form-group">
+                        <label for="checkout-phone">Teléfono</label>
+                        <input type="tel" id="checkout-phone" placeholder="Ingrese su teléfono de contacto" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkout-address">Dirección</label>
+                        <input type="text" id="checkout-address" placeholder="Calle, número, piso, depto." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkout-payment">Método de Pago</label>
+                        <select id="checkout-payment" required>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Tarjeta">Tarjeta</option>
+                            <option value="Transferencia">Transferencia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkout-notes">Notas adicionales (opcional)</label>
+                        <textarea id="checkout-notes" placeholder="Alergias, aclaraciones, etc."></textarea>
+                    </div>
+
+                    <div class="checkout-total-summary">
+                        <span>Total a pagar (con envío):</span>
+                        <strong id="checkout-total-display">$0.00</strong>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="submit" id="confirm-order-btn" class="btn btn-primary">Confirmar Pedido</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="./cart.ts"></script>
 </body>
+
 </html>
