@@ -1,4 +1,5 @@
 import type { IUser } from "../types/IUser";
+import { updateCartBadge } from "./cart";
 
 // Guardar usuario en localStorage
 export function saveUser(user: IUser): void {
@@ -49,6 +50,8 @@ export function setupAdminAuth() {
 }
 
 export function setupClientAuth() {
+    updateCartBadge();
+
     const userSession = localStorage.getItem('user');
     if (userSession) {
         const user = JSON.parse(userSession) as IUser;
