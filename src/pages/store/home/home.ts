@@ -188,7 +188,7 @@ function renderProducts(productsToRender: IProduct[]): void {
     `;
         card.addEventListener("click", () => {
             // Esto llevará a una página de detalle de producto
-            // window.location.href = `../productDetail/productDetail.html?id=${p.id}`;
+            window.location.href = `../productDetail/productDetail.html?id=${p.id}`;
         });
         productGrid.appendChild(card);
     });
