@@ -2,6 +2,7 @@ import type { ICategoria } from "@/types/ICategoria";
 import type { IProduct } from "@/types/IProduct";
 import { getCategories, getProducts } from "@/utils/api"
 import { setupClientAuth } from "@/utils/auth";
+import { navigateTo, PATHS } from "@/utils/navigate";
 
 /*
 ==============================
@@ -188,7 +189,7 @@ function renderProducts(productsToRender: IProduct[]): void {
     `;
         card.addEventListener("click", () => {
             // Esto llevará a una página de detalle de producto
-            window.location.href = `../productDetail/productDetail.html?id=${p.id}`;
+            navigateTo(PATHS.STORE_PRODUCT_DETAIL(p.id))
         });
         productGrid.appendChild(card);
     });

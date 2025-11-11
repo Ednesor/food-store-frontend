@@ -2,6 +2,7 @@ import { getProductById } from "@/utils/api";
 import { setupClientAuth } from "@/utils/auth";
 import type { IProduct } from "@/types/IProduct";
 import { addToCart } from "@/utils/cart";
+import { navigateTo, PATHS } from "@/utils/navigate";
 
 // Referencias al DOM
 const detailContainer = document.getElementById("detail-container") as HTMLElement;
@@ -121,7 +122,7 @@ function setupEventListeners() {
     // 1. Botón "Volver"
     const backBtn = document.getElementById("back-btn");
     backBtn?.addEventListener("click", () => {
-        window.location.href = '/src/pages/store/home/home.html';
+        navigateTo(PATHS.STORE_HOME)
     });
 
     // 2. Referencias a los elementos de cantidad y carrito

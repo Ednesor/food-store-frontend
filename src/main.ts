@@ -1,4 +1,5 @@
 import { prueba } from "./utils/api";
+import { navigateTo, PATHS } from './utils/navigate';
 
 const button = document.getElementById("button");
 button?.addEventListener("click", () => {
@@ -15,16 +16,16 @@ if (!TEST_MODE) {
     try {
       const user = JSON.parse(userData);
       if (user.role === "ADMIN") {
-        window.location.href = "/src/pages/admin/adminHome/adminHome.html"; 
+        navigateTo(PATHS.ADMIN_HOME);
       } else {
-        window.location.href = "/src/pages/store/home/home.html"; 
+        navigateTo(PATHS.STORE_HOME)
       }
     } catch (error) {
       console.error("Error al leer los datos del usuario:", error);
       localStorage.removeItem("user");
-      window.location.href = "/src/pages/auth/login/login.html"; 
+      navigateTo(PATHS.LOGIN)
     }
   } else {
-    window.location.href = "/src/pages/auth/login/login.html"; 
+    navigateTo(PATHS.LOGIN)
   }
 }

@@ -1,6 +1,7 @@
 import { registerUser } from "@/utils/api";
 import { saveUser } from "../../../utils/auth";
 import type { IRegister } from "@/types/IRegister";
+import { navigateTo, PATHS } from "@/utils/navigate";
 
 //Capturar el name, email y password del formulario de registro
 const registerForm = document.getElementById('registerForm') as HTMLFormElement;
@@ -51,7 +52,7 @@ registerForm.addEventListener('submit', async (event) => {
         // Guardar el usuario en localStorage
         saveUser(userData);
         // Redigimos al home del cliente
-        window.location.href = '../../store/home/home.html';
+        navigateTo(PATHS.STORE_HOME)
 
     } catch (error) {
         console.error("Error en el registro:", error);

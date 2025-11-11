@@ -1,5 +1,6 @@
 import { loginUser } from "@/utils/api";
 import { saveUser } from "../../../utils/auth";
+import { navigateTo, PATHS } from "@/utils/navigate";
 
 const loginForm = document.getElementById('loginForm') as HTMLFormElement;
 
@@ -22,9 +23,9 @@ loginForm.addEventListener('submit', async (event) => {
 
         // Redirigimos segun su rol
         if (userData.role === 'ADMIN') {
-            window.location.href = '../../admin/adminHome/adminHome.html';
+            navigateTo(PATHS.ADMIN_HOME)
         } else {
-            window.location.href = '../../store/home/home.html';
+            navigateTo(PATHS.STORE_HOME)
         }
     } catch (error) {
         console.error("Error en login:", error);
