@@ -1,80 +1,81 @@
-/* =========================================================
-  GLOBAL CSS - SUPERFOOD
-  ---------------------------------------------------------
-  Contiene:
-  - Variables globales
-  - Reset general
-  - Estilos comunes (botones, inputs)
-  - Layouts y header compartido (Tienda/Admin)
+/* 
+=========================================================
+    GLOBAL CSS - SUPERFOOD
+---------------------------------------------------------
+    Contiene:
+    - Variables globales
+    - Reset general
+    - Estilos comunes (botones, inputs)
+    - Layouts y header compartido (Tienda/Admin)
 ========================================================= */
 
 /* ============================================= */
 /* =========== PALETA DE COLORES BASE ========== */
 /* ============================================= */
 :root {
-  /* Fondos y Superficies */
-  --background-primary: #1e1e1e;
-  --background-secondary: #2d2d2d;
-  --background-content: #252525;
-  --border-color: #444444;
+    /* Fondos y Superficies */
+    --background-primary: #1e1e1e;
+    --background-secondary: #2d2d2d;
+    --background-content: #252525;
+    --border-color: #444444;
 
-  /* Colores de Texto */
-  --text-primary: #e0e0e0;
-  --text-secondary: #a0a0a0;
+    /* Colores de Texto */
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
 
-  /* Colores Principales */
-  --primary: #ff6b35;
-  --primary-hover: #ff8552;
-  --text-on-primary: #ffffff;
+    /* Colores Principales */
+    --primary: #ff6b35;
+    --primary-hover: #ff8552;
+    --text-on-primary: #ffffff;
 
-  /* Colores de Estado Generales */
-  --accent: #2ecc71;
-  --danger: #e74c3c;
-  --warning: #f39c12;
+    /* Colores de Estado Generales */
+    --accent: #2ecc71;
+    --danger: #e74c3c;
+    --warning: #f39c12;
 
-  /* ===== VARIABLES CLIENTE (STORE) ===== */
-  --price-color: var(--accent);
-  --sale-badge-bg: var(--danger);
-  --text-on-badge: #ffffff;
+    /* ===== VARIABLES CLIENTE (STORE) ===== */
+    --price-color: var(--accent);
+    --sale-badge-bg: var(--danger);
+    --text-on-badge: #ffffff;
 
-  --available-bg: rgba(46, 204, 113, 0.15);
-  --available-text: var(--accent);
-  --unavailable-bg: rgba(231, 76, 60, 0.15);
-  --unavailable-text: var(--danger);
+    --available-bg: rgba(46, 204, 113, 0.15);
+    --available-text: var(--accent);
+    --unavailable-bg: rgba(231, 76, 60, 0.15);
+    --unavailable-text: var(--danger);
 
-  /* ===== VARIABLES ADMIN (DASHBOARD) ===== */
-  --admin-card-1: #8e44ad;
-  --admin-card-2: #2980b9;
-  --admin-card-3: #27ae60;
-  --admin-card-4: #d35400;
+    /* ===== VARIABLES ADMIN (DASHBOARD) ===== */
+    --admin-card-1: #8e44ad;
+    --admin-card-2: #2980b9;
+    --admin-card-3: #27ae60;
+    --admin-card-4: #d35400;
 
-  --btn-edit-bg: #3498db;
-  --btn-edit-hover: #5dade2;
-  --btn-delete-bg: var(--danger);
-  --btn-delete-hover: #e66b5b;
+    --btn-edit-bg: #3498db;
+    --btn-edit-hover: #5dade2;
+    --btn-delete-bg: var(--danger);
+    --btn-delete-hover: #e66b5b;
 
-  --status-pending: var(--warning);
-  --status-processing: var(--btn-edit-bg);
-  --status-completed: var(--accent);
-  --status-cancelled: var(--danger);
+    --status-pending: var(--warning);
+    --status-processing: var(--btn-edit-bg);
+    --status-completed: var(--accent);
+    --status-cancelled: var(--danger);
 }
 
 /* ============================================= */
 /* =============== RESET GLOBAL ================ */
 /* ============================================= */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
 body {
-  background-color: var(--background-primary);
-  color: var(--text-primary);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+    background-color: var(--background-primary);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ============================================= */
@@ -86,14 +87,15 @@ body {
     Botones 
 =========================
 */
-button, .btn {
-  cursor: pointer;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 14px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  transition: background 0.3s, color 0.3s, border 0.3s;
+button,
+.btn {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background 0.3s, color 0.3s, border 0.3s;
 }
 
 /* 
@@ -102,47 +104,59 @@ button, .btn {
 =========================
 */
 .btn-primary {
-  background-color: var(--primary);
-  color: var(--text-on-primary);
+    background-color: var(--primary);
+    color: var(--text-on-primary);
 }
-.btn-primary:hover { background-color: var(--primary-hover); }
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
 
 .btn-secondary {
-  background-color: var(--background-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
 }
+
 .btn-secondary:hover {
-  border-color: var(--primary);
-  color: var(--primary);
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
 .btn-danger {
-  background-color: var(--danger);
-  color: var(--text-on-primary);
+    background-color: var(--danger);
+    color: var(--text-on-primary);
 }
-.btn-danger:hover { background-color: var(--btn-delete-hover); }
+
+.btn-danger:hover {
+    background-color: var(--btn-delete-hover);
+}
 
 /*
 =========================
     Inputs 
 =========================
 */
-input, select, textarea {
-  background-color: var(--background-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 8px 10px;
+input,
+select,
+textarea {
+    background-color: var(--background-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 10px;
 }
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--primary);
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
 }
 
 /* 
 =========================================================
-  HEADER, LAYOUT, SIDEBAR Y MAIN (COMÚN)
+    HEADER, LAYOUT, SIDEBAR Y MAIN (COMÚN)
 ========================================================= 
 */
 
@@ -152,37 +166,40 @@ HEADER (Tienda/Admin)
 =========================
 */
 .menu-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--background-secondary);
-  border-bottom: 1px solid var(--border-color);
-  padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 24px;
 }
 
 .menu-title {
-  color: var(--primary);
-  font-weight: 600;
-  font-size: 1.3rem;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 1.3rem;
 }
 
 .nav-menu {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .nav-menu a {
-  color: var(--text-primary);
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: color 0.3s;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s;
 }
 
-.nav-menu a:hover { color: var(--primary); }
+.nav-menu a:hover {
+    color: var(--primary);
+}
 
 .nav-cart-link {
-    position: relative; /* Permite posicionar el badge */
+    position: relative;
+    /* Permite posicionar el badge */
     display: flex;
     align-items: center;
 }
@@ -193,31 +210,38 @@ HEADER (Tienda/Admin)
     font-size: 0.75rem;
     font-weight: 600;
     padding: 2px 6px;
-    border-radius: 10px; /* Lo hace circular */
+    border-radius: 10px;
+    /* Lo hace circular */
     position: absolute;
-    top: -8px;    /* Ajusta esta posición */
-    right: -12px; /* Ajusta esta posición */
+    top: -8px;
+    /* Ajusta esta posición */
+    right: -12px;
+    /* Ajusta esta posición */
 }
 
 /* Clase helper para ocultar el badge si está en 0 */
 .hidden {
     display: none;
 }
+
 .user-display {
-  color: var(--accent);
-  font-weight: 500;
+    color: var(--accent);
+    font-weight: 500;
 }
 
 #logout-btn {
-  background-color: var(--primary);
-  color: var(--text-on-primary);
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
+    background-color: var(--primary);
+    color: var(--text-on-primary);
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
 }
-#logout-btn:hover { background-color: var(--primary-hover); }
+
+#logout-btn:hover {
+    background-color: var(--primary-hover);
+}
 
 /* 
 =============================
@@ -226,9 +250,9 @@ HEADER (Tienda/Admin)
 */
 .page-container,
 .admin-page-container {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
+    display: flex;
+    flex: 1;
+    overflow: hidden;
 }
 
 /* 
@@ -238,26 +262,26 @@ HEADER (Tienda/Admin)
 */
 .sidebar-container,
 .admin-sidebar {
-  width: 220px;
-  background-color: var(--background-secondary);
-  border-right: 1px solid var(--border-color);
-  padding: 20px 16px;
-  display: flex;
-  flex-direction: column;
+    width: 220px;
+    background-color: var(--background-secondary);
+    border-right: 1px solid var(--border-color);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar-container h3,
 .admin-sidebar h2 {
-  color: var(--primary);
-  font-size: 1rem;
-  margin-bottom: 4px;
+    color: var(--primary);
+    font-size: 1rem;
+    margin-bottom: 4px;
 }
 
 .sidebar-container p,
 .admin-sidebar p {
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  margin-bottom: 16px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 16px;
 }
 
 /*
@@ -404,14 +428,14 @@ HEADER (Tienda/Admin)
 /* CONTENIDO PRINCIPAL */
 .main-content,
 .admin-main-content {
-  flex: 1;
-  padding: 20px 30px;
-  background-color: var(--background-content);
-  overflow-y: auto;
+    flex: 1;
+    padding: 20px 30px;
+    background-color: var(--background-content);
+    overflow-y: auto;
 }
 
 /* =========================================================
-  ESTILOS COMPARTIDOS DEL PANEL DE ADMINISTRACIÓN
+    ESTILOS COMPARTIDOS DEL PANEL DE ADMINISTRACIÓN
 ========================================================= */
 
 /* Estilos para la barra superior de las páginas de admin */
@@ -549,7 +573,7 @@ HEADER (Tienda/Admin)
 */
 
 /* =========================
-    Badges de Estado
+    BADGES DE ESTADO (Para Productos y Pedidos)
 =========================
 */
 .status-badge {
@@ -558,6 +582,52 @@ HEADER (Tienda/Admin)
     border-radius: 20px;
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+/* Estados de Pedido */
+.status-badge.status-pendiente {
+    background-color: var(--warning);
+    /* O un gris si 'warning' no existe */
+    color: var(--text-primary);
+}
+
+.status-badge.status-confirmado {
+    background-color: var(--primary);
+    color: var(--text-on-primary);
+}
+
+.status-badge.status-terminado {
+    background-color: var(--accent);
+    color: var(--text-on-primary);
+}
+
+.status-badge.status-cancelado {
+    background-color: var(--danger);
+    color: var(--text-on-primary);
+}
+
+.modal-status-message.status-pendiente {
+    background-color: rgba(243, 156, 18, 0.1);
+    border-color: var(--status-pending);
+    color: var(--status-pending);
+}
+
+.modal-status-message.status-confirmado {
+    background-color: rgba(52, 152, 219, 0.1);
+    border-color: var(--status-processing);
+    color: var(--status-processing);
+}
+
+.modal-status-message.status-terminado {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-color: var(--status-completed);
+    color: var(--status-completed);
+}
+
+.modal-status-message.status-cancelado {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: var(--status-cancelled);
+    color: var(--status-cancelled);
 }
 
 .status-available {
