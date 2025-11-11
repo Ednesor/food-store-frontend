@@ -1,8 +1,10 @@
-import { setupClientAuth } from "@/utils/auth";
-import { getProducts } from "@/utils/api";
+import { setupClientAuth, getUser } from "@/utils/auth";
+import { getProducts, createOrder } from "@/utils/api";
 import { getCart, removeFromCart, updateItemQuantity, clearCart } from "@/utils/cart";
 import type { ICartItem } from "@/types/ICart";
 import type { IProduct } from "@/types/IProduct";
+import type { IOrderCreate, IDetallePedidoCreate } from "@/types/IOrders";
+import { navigateTo, PATHS } from "@/utils/navigate";
 
 // Referencias al DOM
 const cartContainer = document.getElementById("cart-container") as HTMLDivElement;
@@ -21,7 +23,7 @@ const clearCartBtn = document.getElementById("clear-cart-btn") as HTMLButtonElem
 // Referencias al modal de checkout 
 const checkoutModal = document.getElementById("checkout-modal") as HTMLDivElement;
 const checkoutForm = document.getElementById("checkout-form") as HTMLFormElement;
-const cancelModalBtn = document.getElementById("close-modal-btn") as HTMLButtonElement; 
+const cancelModalBtn = document.getElementById("close-modal-btn") as HTMLButtonElement;
 const checkoutTotalDisplay = document.getElementById("checkout-total-display") as HTMLSpanElement;
 
 
@@ -247,20 +249,100 @@ function setupEventListeners() {
         });
 
         // 15. LISTENER PARA EL ENVÍO DEL FORMULARIO DE CHECKOUT
-        checkoutForm.addEventListener("submit", (event) => {
+        checkoutForm.addEventListener("submit", async (event) => {
             event.preventDefault(); // Evita que la página se recargue
 
             // Obtenemos los valores (solo los requeridos)
             const phone = (document.getElementById("checkout-phone") as HTMLInputElement).value;
             const address = (document.getElementById("checkout-address") as HTMLInputElement).value;
+            const payment = (document.getElementById("checkout-payment") as HTMLSelectElement).value;
+            const notes = (document.getElementById("checkout-notes") as HTMLTextAreaElement).value;
 
-            if (!phone || !address) {
-                alert("Por favor, completa el teléfono y la dirección.");
+            if (!phone || !address || !payment) {
+                alert("Por favor, completa el teléfono, la dirección y el metodo de pago.");
                 return; // Detenemos el envío
             }
 
-            // MUROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-            alert("¡Pedido listo para enviar al backend! (Falta API)");
+            // --- INICIO DE LA LÓGICA DE CHECKOUT ---
+
+            // 1. OBTENER ITEMS Y USUARIO
+            const cart = getCart();
+            const user = getUser();
+
+            // Validamos que el usuario exista
+            if (!user) {
+                alert("Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.");
+                navigateTo(PATHS.LOGIN);
+                return;
+            }
+
+            // --- NUEVA VALIDACIÓN DE STOCK ANTES DE ENVIAR ---
+            let stockError = false;
+            for (const item of cart) {
+                const productInfo = allProducts.find(p => p.id === item.id);
+                if (!productInfo || !productInfo.activo || item.quantity > productInfo.stock) {
+                    alert(`¡Error! El producto "${item.nombre}" ya no está disponible o el stock es insuficiente (Máx: ${productInfo?.stock ?? 0}).`);
+                    stockError = true;
+                    break; // Detiene el bucle
+                }
+            }
+
+            if (stockError) {
+                // Detenemos el envío y recargamos la vista del carrito para que el usuario vea el error
+                loadAndRenderCart();
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert("Tu carrito está vacío.");
+                return;
+            }
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.precio * item.quantity), 0);
+            const total = subtotal + SHIPPING_COST;
+
+            // 2. FORMATEAR LOS DATOS PARA LA API
+            const detallesParaApi: IDetallePedidoCreate[] = cart.map(item => ({
+                cantidad: item.quantity,
+                subtotal: item.precio * item.quantity,
+                producto_id: item.id
+            }));
+
+            // Creamos el objeto IOrderCreate
+            const orderData: IOrderCreate = {
+                total: total,
+                detallePedidos: detallesParaApi,
+                telefono: phone,
+                direccion: address,
+                metodoPago: payment,
+                notas: notes,
+                usuarioId: user.id
+            };
+
+            // 3. ENVIAR A LA API
+            const submitButton = (event.submitter as HTMLButtonElement);
+            try {
+                // Deshabilitamos el botón para evitar doble click
+                submitButton.disabled = true;
+                submitButton.textContent = "Procesando...";
+
+                await createOrder(orderData);
+
+                // 4. ÉXITO
+                alert("¡Pedido realizado con éxito!");
+
+                clearCart(); // Limpiamos el carrito
+
+                // Redirigimos al usuario a "Mis Pedidos"
+                navigateTo(PATHS.CLIENT_ORDERS);
+
+            } catch (error) {
+                console.error("Error al crear el pedido:", error);
+                alert(`Ocurrió un error al enviar tu pedido: ${error}`);
+                // Volvemos a habilitar el botón si hay error
+                submitButton.disabled = false;
+                submitButton.textContent = "Confirmar Pedido";
+            }
         });
     })
 }

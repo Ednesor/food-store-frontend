@@ -3,7 +3,11 @@ import type { ICategoria } from "@/types/ICategoria";
 import { getProducts, getCategories, createProduct, updateProduct, deleteProduct, updateProductStatus } from "@/utils/api";
 import { setupAdminAuth } from "@/utils/auth";
 
-// Referencias al DOM
+/*
+=========================================================
+    REFERENCIAS AL DOM
+=========================================================
+*/
 const tableBody = document.getElementById("product-table-body") as HTMLTableSectionElement;
 const modal = document.getElementById("product-modal") as HTMLDivElement;
 const modalTitle = document.getElementById("modal-title") as HTMLHeadingElement;
@@ -20,19 +24,31 @@ const categorySelect = document.getElementById("prod-category") as HTMLSelectEle
 const imageInput = document.getElementById("prod-image") as HTMLInputElement;
 const activeCheckbox = document.getElementById("prod-active") as HTMLInputElement;
 
-// Estado
+/*
+=========================================================
+    ESTADO
+=========================================================
+*/
 let editingProductId: number | null = null;
 let allProducts: IProduct[] = [];
 let allCategories: ICategoria[] = [];
 
-// Inicialización
+/*
+=========================================================
+    INICIALIZACIÓN
+=========================================================
+*/
 document.addEventListener("DOMContentLoaded", async () => {
     setupAdminAuth();
     await loadInitialData();
     setupEventListeners();
 });
 
-// Carga inicial de datos
+/*
+=========================================================
+    CARGA DE DATOS
+=========================================================
+*/
 async function loadInitialData() {
     try {
         [allProducts, allCategories] = await Promise.all([getProducts(), getCategories()]);
@@ -44,6 +60,11 @@ async function loadInitialData() {
     }
 }
 
+/*
+=========================================================
+    RENDERIZADO
+=========================================================
+*/
 // Renderiza la tabla de productos
 function renderTable(products: IProduct[]) {
     tableBody.innerHTML = "";
@@ -87,6 +108,11 @@ function populateCategorySelect(categories: ICategoria[]) {
     });
 }
 
+/*
+=========================================================
+    MANEJO DE EVENTOS
+=========================================================
+*/
 // Configura los listeners
 function setupEventListeners() {
     newProductBtn.addEventListener("click", openNewProductModal);
@@ -107,6 +133,12 @@ function setupEventListeners() {
         }
     });
 }
+
+/*
+=========================================================
+    LÓGICA DEL MODAL (PRODUCTOS)
+=========================================================
+*/
 
 // Abre el modal para un nuevo producto
 function openNewProductModal() {
@@ -135,8 +167,6 @@ function openEditProductModal(id: number) {
 }
 
 // Maneja el envío del formulario para crear o actualizar productos.
-// Si se está editando, actualiza los datos y también verifica si el estado "activo" ha cambiado para realizar una actualización específica.
-// Si se está creando, simplemente envía los datos del nuevo producto. Al finalizar, cierra el modal y recarga la tabla.
 async function handleFormSubmit(event: SubmitEvent) {
     event.preventDefault();
     const productData = {
@@ -147,6 +177,7 @@ async function handleFormSubmit(event: SubmitEvent) {
         categoriaId: parseInt(categorySelect.value, 10),
         urlImagen: imageInput.value.trim(),
     };
+    const newStatus = activeCheckbox.checked; // Capturamos el estado deseado
 
     if (isNaN(productData.precio) || isNaN(productData.stock) || isNaN(productData.categoriaId)) {
         alert("Por favor, complete todos los campos correctamente.");
@@ -155,24 +186,33 @@ async function handleFormSubmit(event: SubmitEvent) {
 
     try {
         if (editingProductId) {
+            // --- MODO EDICIÓN ---
             const originalProduct = allProducts.find(p => p.id === editingProductId);
             if (!originalProduct) throw new Error("Producto no encontrado.");
 
             const originalStatus = originalProduct.activo;
-            const newStatus = activeCheckbox.checked;
 
+            // 1. Actualiza los datos principales
             await updateProduct(editingProductId, productData);
 
+            // 2. Actualiza el estado SOLO SI cambió
             if (originalStatus !== newStatus) {
                 await updateProductStatus(editingProductId);
             }
         } else {
-            // La creación de un producto nuevo ya lo pone como 'activo' por defecto en el backend
-            await createProduct(productData);
+            // --- MODO CREACIÓN ---
+            // 1. Crea el producto (El backend lo pondrá 'activo' por defecto)
+            const newProduct = await createProduct(productData);
+            
+            // 2. Si el admin quería crearlo como 'Inactivo'
+            if (newStatus === false) {
+                // Lo desactivamos inmediatamente
+                await updateProductStatus(newProduct.id);
+            }
         }
 
         closeModal();
-        loadInitialData();
+        loadInitialData(); // Recarga la tabla
     } catch (error) {
         alert(`Error al guardar el producto: ${error}`);
     }

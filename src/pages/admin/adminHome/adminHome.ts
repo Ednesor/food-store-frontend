@@ -1,7 +1,7 @@
 import type { ICategoria } from "@/types/ICategoria";
 import type { IProduct } from "@/types/IProduct";
 import type { IOrder } from "@/types/IOrders";
-import { getCategories, getProducts } from "@/utils/api";
+import { getCategories, getProducts, getOrders } from "@/utils/api";
 import {setupAdminAuth} from "@/utils/auth"
 
 /*
@@ -34,16 +34,14 @@ async function initializeApp() {
 */
 async function loadAndRenderStats() {
     try {
-        const [categories, products] = await Promise.all([
+        const [categories, products, orders] = await Promise.all([
             getCategories(),
             getProducts(),
-            // NOTA: Aún no existe el endpoint para pedidos, se deja como pendiente.
+            getOrders(),
         ]);
 
-        // Mock temporal de pedidos hasta que el backend esté completo
-        const allOrders: IOrder[] = [];
-
-        renderStats(categories, products, allOrders);
+        // 3. PASAMOS LOS DATOS REALES
+        renderStats(categories, products, orders);
 
     } catch (error) {
         console.error("Error al cargar las estadísticas:", error);
@@ -59,7 +57,7 @@ async function loadAndRenderStats() {
 function renderStats(categories: ICategoria[], products: IProduct[], orders: IOrder[]) {
     const totalCategories = categories.length;
     const totalProducts = products.length;
-    const totalOrders = orders.length; // Será 0 por ahora
+    const totalOrders = orders.length;
     const availableProducts = products.filter(p => p.activo).length;
 
     categoryCount.textContent = String(totalCategories);

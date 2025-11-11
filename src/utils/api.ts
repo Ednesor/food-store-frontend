@@ -3,6 +3,7 @@ import type { IRegister } from '@/types/IRegister';
 import type { IUser } from '@/types/IUser';
 import type { IProduct } from '@/types/IProduct';
 import type { ICategoria } from '@/types/ICategoria';
+import type { IOrder, IOrderCreate, EstadoPedido } from '@/types/IOrders';
 
 
 //Prueba de conexion con el backend
@@ -168,5 +169,66 @@ export function updateProductStatus(id: number): Promise<IProduct> {
 export function deleteProduct(id: number): Promise<void> {
     return request<void>(`/productos/${id}`, {
         method: "DELETE",
+    });
+}
+
+/*
+=========================================================
+    MÉTODOS PARA GESTIÓN DE PEDIDOS
+=========================================================
+*/
+
+/**
+ * Obtiene TODOS los pedidos (para el Admin).
+ */
+export function getOrders(): Promise<IOrder[]> {
+    return request<IOrder[]>("/pedidos");
+}
+
+/**
+ * Obtiene los pedidos DE UN USUARIO (para el Cliente).
+ */
+export function getOrdersByUserId(id: number): Promise<IOrder[]> {
+    return request<IOrder[]>(`/pedidos/getAll/${id}`);
+}
+
+/**
+ * Crea un nuevo pedido (para el Cliente).
+ */
+export function createOrder(data: IOrderCreate): Promise<IOrder> {
+    return request<IOrder>("/pedidos", {
+        method: "POST",
+        body: JSON.stringify(data),
+    });
+}
+
+/**
+ * Actualiza el estado de un pedido (para el Admin).
+ */
+export function updateOrderStatus(id: number, estado: EstadoPedido): Promise<IOrder> {
+    let endpoint: string;
+
+    switch (estado) {
+        case "CONFIRMADO":
+            endpoint = `/pedidos/confirmar/${id}`;
+            break;
+        case "TERMINADO":
+            endpoint = `/pedidos/terminar/${id}`;
+            break;
+        default:
+            throw new Error(`Estado '${estado}' no es actualizable por esta función.`);
+    }
+
+    return request<IOrder>(endpoint, {
+        method: "POST",
+    });
+}
+
+/**
+ * Cancela un pedido (para el Admin o Cliente.
+ */
+export function cancelOrder(id: number): Promise<void> {
+    return request<void>(`/pedidos/cancelar/${id}`, {
+        method: "PUT",
     });
 }
