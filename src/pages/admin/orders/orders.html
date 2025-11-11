@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos | SuperFood</title>
+    <link rel="stylesheet" href="../../../../global.css">
+    <link rel="stylesheet" href="../categories/categories.css">
+    <link rel="stylesheet" href="./orders.css">
+</head>
+
+<body>
+    <header class="menu-container">
+        <h1 class="menu-title">🍽️ SuperFood</h1>
+        <nav class="nav-menu">
+            <a href="../../store/home/home.html">Tienda</a>
+            <a href="../adminHome/adminHome.html">Panel Admin</a>
+            <span id="user-display" class="user-display"></span>
+            <a id="logout-btn" href="#">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <div class="admin-page-container">
+        <aside class="admin-sidebar">
+            <h2>Administración</h2>
+            <p>Panel de control</p>
+            <nav>
+                <ul>
+                    <li><a href="../adminHome/adminHome.html">📊 Dashboard</a></li>
+                    <li><a href="../categories/categories.html">📂 Categorías</a></li>
+                    <li><a href="../products/products.html">🍔 Productos</a></li>
+                    <li class="active"><a href="#">📦 Pedidos</a></li>
+                    <li class="separator"></li>
+                    <li><a href="../../store/home/home.html">🏪 Ver Tienda</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main-content">
+            <div class="top-bar">
+                <h1>Gestión de Pedidos</h1>
+                <div class="filter-container">
+                    <select id="filter-status">
+                        <option value="TODOS">Todos los pedidos</option>
+                        <option value="PENDIENTE">Pendiente</option>
+                        <option value="CONFIRMADO">Confirmado</option>
+                        <option value="TERMINADO">Terminado</option>
+                        <option value="CANCELADO">Cancelado</option>
+                    </select>
+                </div>
+            </div>
+
+            <section id="orders-list-container" class="orders-list-container">
+                <p>Cargando pedidos...</p>
+            </section>
+
+            <!-- MODAL DE DETALLE -->
+            <div id="order-detail-modal" class="modal hidden">
+                <div class="modal-content large">
+                    <button type="button" id="close-modal-btn" class="modal-close-btn">&times;</button>
+                    <h2 id="modal-title">Detalle del Pedido</h2>
+
+                    <div class="modal-body-grid">
+                        <!-- SECCIÓN: Información del Cliente -->
+                        <div class="modal-section">
+                            <h3>Información del Cliente</h3>
+                            <div id="order-info-details">
+                                <p><strong>Cliente:</strong> <span id="modal-client-name">(No disponible)</span></p>
+                                <p><strong>Fecha:</strong> <span id="modal-order-date"></span></p>
+                                <p><strong>Teléfono:</strong> <span id="modal-client-phone">(No disponible)</span></p>
+                                <p><strong>Dirección:</strong> <span id="modal-client-address">(No disponible)</span></p>
+                                <p><strong>Método de pago:</strong> <span id="modal-client-payment">(No disponible)</span></p>
+                            </div>
+                        </div>
+
+                        <!-- SECCIÓN: Productos -->
+                        <div class="modal-section">
+                            <h3>Productos</h3>
+                            <div id="modal-products-list" class="modal-products-list">
+                                <!-- Los productos se renderizarán aquí -->
+                            </div>
+                            <div id="modal-costs" class="modal-costs">
+                                <!-- Los costos se renderizarán aquí -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN: Cambiar Estado -->
+                    <div class="modal-status-update">
+                        <label for="modal-status-select">Cambiar Estado:</label>
+                        <select id="modal-status-select">
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="CONFIRMADO">Confirmado</option>
+                            <option value="TERMINADO">Terminado</option>
+                            <option value="CANCELADO">Cancelado</option>
+                        </select>
+                        <button id="update-status-btn" class="btn btn-primary">Actualizar Estado</button>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="./orders.ts"></script>
+</body>
+</html>
