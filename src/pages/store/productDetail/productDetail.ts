@@ -3,6 +3,7 @@ import { setupClientAuth } from "@/utils/auth";
 import type { IProduct } from "@/types/IProduct";
 import { addToCart } from "@/utils/cart";
 import { navigateTo, PATHS } from "@/utils/navigate";
+import { showNotification } from "@/utils/notifications";
 
 // Referencias al DOM
 const detailContainer = document.getElementById("detail-container") as HTMLElement;
@@ -179,7 +180,7 @@ function setupEventListeners() {
         let qty = parseInt(qtyInput.value, 10);
         validateAndUpdateButtons(qty);
     });
-    
+
     // 6. Listener para 'change' (por si pegan un valor y salen)
     qtyInput.addEventListener("change", () => {
         let qty = parseInt(qtyInput.value, 10);
@@ -190,14 +191,14 @@ function setupEventListeners() {
     addToCartBtn.addEventListener("click", () => {
         // Volvemos a validar la cantidad final
         let quantity = parseInt(qtyInput.value, 10);
-        
+
         if (isNaN(quantity) || quantity < 1) {
             quantity = 1;
         }
-        
+
         // **VALIDACIÓN DE STOCK**
         if (quantity > stock) {
-            alert(`No puedes agregar ${quantity} items. El stock máximo es ${stock}.`);
+            showNotification(`No puedes agregar ${quantity} items. El stock máximo es ${stock}.`, 'error'); 
             quantity = stock;
             validateAndUpdateButtons(stock); // Sincronizar input y botones
             return; // Detenemos la acción
