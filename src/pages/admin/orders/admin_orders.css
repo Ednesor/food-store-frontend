@@ -1,0 +1,55 @@
+/*
+=========================================================
+    ADMIN - ORDERS (Estilos específicos)
+========================================================= 
+*/
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-container label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: none; /* Ocultamos el label para que sea solo el dropdown */
+}
+
+*/
+/* Sección de actualización de estado */
+.modal-status-update {
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+.modal-status-update label {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.modal-status-update select {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+}
+
+.modal-status-update select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.modal-status-update button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+}
+
+.modal-status-update button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
