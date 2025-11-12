@@ -1,6 +1,8 @@
 import { setupAdminAuth } from "@/utils/auth";
 import { getOrders, updateOrderStatus, cancelOrder } from "@/utils/api";
 import type { IOrder, IDetallePedido, EstadoPedido } from "@/types/IOrders";
+import { showNotification } from "@/utils/notifications";
+import { showConfirmation } from "@/utils/confirmation";
 
 /*
 =========================================================
@@ -290,26 +292,43 @@ async function handleStatusUpdate() {
 
     const newState = modalStatusSelect.value as EstadoPedido;
 
-    if (confirm(`¿Estás seguro de cambiar el estado a "${newState}"?`)) {
+    // 1. Buscamos el pedido original en nuestro array de estado
+    const order = allOrders.find(o => o.id === currentEditingOrderId);
+    
+    if (!order) {
+        // Esto es solo un seguro, no debería pasar
+        console.error("Error: No se encontró el pedido para comparar estados.");
+        return;
+    }
+
+    // 2. Comparamos el estado original con el nuevo
+    if (newState === order.estado) {
+        // Si son iguales, mostramos una notificación y salimos
+        showNotification("El pedido ya se encuentra en este estado.", 'info');
+        return;
+    }
+
+    // 3. Si son diferentes, continuamos con la confirmación
+    const didConfirm = await showConfirmation(`¿Estás seguro de cambiar el estado a "${newState}"?`, `Cambiar estado`, `Cambiar`)
+    
+    if (didConfirm) {
         try {
             updateStatusBtn.disabled = true;
             updateStatusBtn.textContent = "Actualizando...";
 
             if (newState === 'CANCELADO') {
-                // Usamos el endpoint específico de cancelación
                 await cancelOrder(currentEditingOrderId);
             } else {
-                // Usamos el endpoint genérico para CONFIRMADO o TERMINADO
                 await updateOrderStatus(currentEditingOrderId, newState);
             }
 
-            alert("Estado actualizado con éxito.");
+            showNotification("Estado actualizado con éxito.", 'success')
             closeModal();
-            await loadAndRenderOrders(); // Recargamos la lista
+            await loadAndRenderOrders(); 
 
         } catch (error) {
             console.error("Error al actualizar estado:", error);
-            alert(`Error al actualizar: ${error}`);
+            showNotification(`Error al actualizar: ${error}`, 'error')
         } finally {
             updateStatusBtn.disabled = false;
             updateStatusBtn.textContent = "Actualizar Estado";
