@@ -1,0 +1,103 @@
+/*
+=========================================================
+    ADMIN - HOME (Estilos específicos del Dashboard)
+=========================================================
+*/
+
+/* =========================================================
+    TARJETAS DE ESTADÍSTICAS
+========================================================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background-color: var(--background-secondary);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.stat-card h3 {
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.stat-card .stat-value {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 15px;
+}
+
+.stat-card:nth-child(1) .stat-value {
+    color: var(--admin-card-1);
+}
+
+.stat-card:nth-child(2) .stat-value {
+    color: var(--admin-card-2);
+}
+
+.stat-card:nth-child(3) .stat-value {
+    color: var(--admin-card-3);
+}
+
+.stat-card:nth-child(4) .stat-value {
+    color: var(--admin-card-4);
+}
+
+.stat-card .manage-btn {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.stat-card .manage-btn:hover {
+    background-color: var(--primary);
+    color: var(--text-on-primary);
+    border-color: var(--primary);
+}
+
+.stat-card .description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* =========================================================
+    PANEL DE RESUMEN
+========================================================= 
+*/
+.summary-panel {
+    margin-top: 30px;
+    padding: 24px;
+    background-color: var(--background-secondary);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.summary-panel h2 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+}
+
+#summary-text {
+    color: var(--text-secondary);
+}
