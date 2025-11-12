@@ -1,0 +1,50 @@
+/*
+=========================================================
+    CLIENT - MIS PEDIDOS (Estilos específicos)
+=========================================================
+*/
+
+/* 
+=========================================================
+    LAYOUT PRINCIPAL 
+========================================================= 
+*/
+.page-container {
+    padding: 24px 30px;
+    overflow-y: auto;
+    display: block;
+}
+
+/* 
+=========================================================
+    ESTADO VACÍO
+========================================================= 
+*/
+.empty-cart {
+    text-align: center;
+    padding: 40px;
+    background-color: var(--background-secondary);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.empty-cart p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+/* 
+=========================================================
+    MODAL - MENSAJE DE ESTADO
+========================================================= 
+*/
+.modal-status-message {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    border: 1px solid;
+}
