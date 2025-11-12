@@ -3,6 +3,7 @@ import type { IProduct } from "@/types/IProduct";
 import type { IOrder } from "@/types/IOrders";
 import { getCategories, getProducts, getOrders } from "@/utils/api";
 import {setupAdminAuth} from "@/utils/auth"
+import { checkAndShowWelcomeMessage } from "@/utils/notifications";
 
 /*
 =========================================================
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", initializeApp);
 
 async function initializeApp() {
     setupAdminAuth();
+    checkAndShowWelcomeMessage()
     await loadAndRenderStats();
 }
 
