@@ -3,6 +3,7 @@ import type { IProduct } from "@/types/IProduct";
 import { getCategories, getProducts } from "@/utils/api"
 import { setupClientAuth } from "@/utils/auth";
 import { navigateTo, PATHS } from "@/utils/navigate";
+import { checkAndShowWelcomeMessage } from "@/utils/notifications";
 
 /*
 ==============================
@@ -35,6 +36,7 @@ document.addEventListener("DOMContentLoaded", initializeApp);
 
 async function initializeApp() {
     setupClientAuth();
+    checkAndShowWelcomeMessage();
     await loadAndRenderInitialData();
     setupEventListeners();
 }

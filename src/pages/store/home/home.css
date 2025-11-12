@@ -1,11 +1,45 @@
 /*
 =========================================================
-    HOME STORE (Vista Cliente)
+    HOME STORE (Layout Específico)
 =========================================================
 */
 
-/* 
+.sidebar-container {
+    width: 220px;
+    background-color: var(--background-secondary);
+    border-right: 1px solid var(--border-color);
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-container h3 {
+    color: var(--primary);
+    font-size: 1rem;
+    margin-bottom: 4px;
+}
+
+.sidebar-container p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px 30px;
+    background-color: var(--background-content);
+    overflow-y: auto;
+}
+
+
+/*
 =========================================================
+    HOME STORE (Contenido)
+=========================================================
+*/
+
+/* =========================================================
     SIDEBAR DE CATEGORÍAS
 ========================================================= 
 */
@@ -46,8 +80,7 @@
     border: 1px solid var(--border-color);
 }
 
-/* 
-=========================================================
+/* =========================================================
     CONTENIDO PRINCIPAL
 ========================================================= 
 */
