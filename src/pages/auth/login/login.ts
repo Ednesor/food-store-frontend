@@ -1,6 +1,7 @@
 import { loginUser } from "@/utils/api";
 import { saveUser } from "../../../utils/auth";
 import { navigateTo, PATHS } from "@/utils/navigate";
+import { showNotification } from "@/utils/notifications";
 
 const loginForm = document.getElementById('loginForm') as HTMLFormElement;
 
@@ -11,7 +12,7 @@ loginForm.addEventListener('submit', async (event) => {
     const password = (document.getElementById('password') as HTMLInputElement).value;
 
     if (!email || !password) {
-        alert('Por favor, complete todos los campos.');
+        showNotification("Por favor, complete todos los campos.", 'error')
         return;
     }
 
@@ -21,6 +22,8 @@ loginForm.addEventListener('submit', async (event) => {
         // Guardamos el usuario en localStorage
         saveUser(userData);
 
+        sessionStorage.setItem('welcomeMessage', `¡Hola de nuevo, ${userData.name}!`);
+
         // Redirigimos segun su rol
         if (userData.role === 'ADMIN') {
             navigateTo(PATHS.ADMIN_HOME)
@@ -29,6 +32,6 @@ loginForm.addEventListener('submit', async (event) => {
         }
     } catch (error) {
         console.error("Error en login:", error);
-        alert("Ocurrió un error al iniciar sesión.");
+        showNotification("Ocurrió un error al iniciar sesión.", 'error')
     }
 })
