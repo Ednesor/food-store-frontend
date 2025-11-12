@@ -5,6 +5,8 @@ import type { ICartItem } from "@/types/ICart";
 import type { IProduct } from "@/types/IProduct";
 import type { IOrderCreate, IDetallePedidoCreate } from "@/types/IOrders";
 import { navigateTo, PATHS } from "@/utils/navigate";
+import { showNotification } from "@/utils/notifications";
+import { showConfirmation } from "@/utils/confirmation";
 
 // Referencias al DOM
 const cartContainer = document.getElementById("cart-container") as HTMLDivElement;
@@ -156,14 +158,20 @@ function renderSummary(cart: ICartDetail[]) {
  * Configura los listeners.
  */
 function setupEventListeners() {
-    clearCartBtn.addEventListener("click", () => {
-        if (confirm("¿Estás seguro de que quieres vaciar el carrito?")) {
+    clearCartBtn.addEventListener("click", async () => {
+        const didConfirm = await showConfirmation(
+            "¿Estás seguro de que quieres vaciar el carrito?",
+            "Vaciar Carrito",
+            "Vaciar"
+        );
+        if (didConfirm) {
             clearCart();
+            showNotification("Carrito vaciado con éxito.", 'success');
             loadAndRenderCart();
         }
     });
 
-    cartItemsList.addEventListener("click", (event) => {
+    cartItemsList.addEventListener("click", async (event) => {
         const target = event.target as HTMLElement;
         const itemElement = target.closest<HTMLDivElement>(".cart-item");
         if (!itemElement || !itemElement.dataset.productId) return;
@@ -178,15 +186,26 @@ function setupEventListeners() {
         const stock = product.stock;
 
         if (target.classList.contains("cart-item-remove")) {
-            removeFromCart(productId);
-            loadAndRenderCart();
+            const didConfirm = await showConfirmation(
+                `¿Quieres eliminar "${product.nombre}" del carrito?`,
+                "Quitar Producto",
+                "Quitar"
+            );
+            if (didConfirm) {
+                removeFromCart(productId);
+                showNotification(`"${product.nombre}" quitado del carrito.`, 'success');
+                loadAndRenderCart();
+            }
         }
 
         if (target.classList.contains("qty-decrease")) {
             currentQuantity--; // Restamos
             if (currentQuantity <= 0) {
-                if (confirm("¿Quieres eliminar este producto del carrito?")) {
+                const didConfirm = await showConfirmation(
+                    "¿Quieres eliminar este producto del carrito?", "Quitar Producto", "Quitar");
+                if (didConfirm) {
                     removeFromCart(productId);
+                    showNotification("Producto eliminado con éxito", 'success')
                 }
             } else {
                 updateItemQuantity(productId, currentQuantity);
@@ -200,7 +219,7 @@ function setupEventListeners() {
                 currentQuantity++; // Solo sumamos si es menor al stock
                 updateItemQuantity(productId, currentQuantity);
             } else {
-                alert("Stock máximo alcanzado");
+                showNotification("Stock máximo alcanzado", 'info');
             }
             loadAndRenderCart();
         }
@@ -222,7 +241,7 @@ function setupEventListeners() {
             let newQuantity = Number(target.value);
 
             if (newQuantity > stock) {
-                alert(`Stock máximo alcanzado (${stock}). Ajustando cantidad.`);
+                showNotification(`Stock máximo es ${stock}. Ajustando cantidad.`, 'info');
                 newQuantity = stock;
             }
             if (newQuantity <= 0) {
@@ -259,7 +278,7 @@ function setupEventListeners() {
             const notes = (document.getElementById("checkout-notes") as HTMLTextAreaElement).value;
 
             if (!phone || !address || !payment) {
-                alert("Por favor, completa el teléfono, la dirección y el metodo de pago.");
+                showNotification("Por favor, completa el teléfono, la dirección y el metodo de pago.", 'error');
                 return; // Detenemos el envío
             }
 
@@ -271,7 +290,7 @@ function setupEventListeners() {
 
             // Validamos que el usuario exista
             if (!user) {
-                alert("Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.");
+                showNotification("Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.", 'error');
                 navigateTo(PATHS.LOGIN);
                 return;
             }
@@ -281,7 +300,8 @@ function setupEventListeners() {
             for (const item of cart) {
                 const productInfo = allProducts.find(p => p.id === item.id);
                 if (!productInfo || !productInfo.activo || item.quantity > productInfo.stock) {
-                    alert(`¡Error! El producto "${item.nombre}" ya no está disponible o el stock es insuficiente (Máx: ${productInfo?.stock ?? 0}).`);
+                    const stockMsg = productInfo ? `(Máx: ${productInfo.stock})` : '(Producto no encontrado)';
+                    showNotification(`El producto "${item.nombre}" no está disponible o no hay stock ${stockMsg}`, 'info');
                     stockError = true;
                     break; // Detiene el bucle
                 }
@@ -294,7 +314,7 @@ function setupEventListeners() {
             }
 
             if (cart.length === 0) {
-                alert("Tu carrito está vacío.");
+                showNotification("Tu carrito está vacío.", 'error');
                 return;
             }
 
@@ -329,7 +349,7 @@ function setupEventListeners() {
                 await createOrder(orderData);
 
                 // 4. ÉXITO
-                alert("¡Pedido realizado con éxito!");
+                sessionStorage.setItem('welcomeMessage', '¡Pedido realizado con éxito!');
 
                 clearCart(); // Limpiamos el carrito
 
@@ -338,7 +358,8 @@ function setupEventListeners() {
 
             } catch (error) {
                 console.error("Error al crear el pedido:", error);
-                alert(`Ocurrió un error al enviar tu pedido: ${error}`);
+                const msg = (error instanceof Error) ? error.message : "Ocurrió un error al enviar tu pedido";
+                showNotification(msg, 'error');
                 // Volvemos a habilitar el botón si hay error
                 submitButton.disabled = false;
                 submitButton.textContent = "Confirmar Pedido";

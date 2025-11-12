@@ -2,6 +2,8 @@ import type { IProduct } from "@/types/IProduct";
 import type { ICategoria } from "@/types/ICategoria";
 import { getProducts, getCategories, createProduct, updateProduct, deleteProduct, updateProductStatus } from "@/utils/api";
 import { setupAdminAuth } from "@/utils/auth";
+import { showNotification } from "@/utils/notifications";
+import { showConfirmation } from "@/utils/confirmation";
 
 /*
 =========================================================
@@ -180,7 +182,7 @@ async function handleFormSubmit(event: SubmitEvent) {
     const newStatus = activeCheckbox.checked; // Capturamos el estado deseado
 
     if (isNaN(productData.precio) || isNaN(productData.stock) || isNaN(productData.categoriaId)) {
-        alert("Por favor, complete todos los campos correctamente.");
+        showNotification("Por favor, complete todos los campos correctamente.",'error')
         return;
     }
 
@@ -199,6 +201,8 @@ async function handleFormSubmit(event: SubmitEvent) {
             if (originalStatus !== newStatus) {
                 await updateProductStatus(editingProductId);
             }
+
+            showNotification("Producto actualizado con exito.",'success')
         } else {
             // --- MODO CREACIÓN ---
             // 1. Crea el producto (El backend lo pondrá 'activo' por defecto)
@@ -209,23 +213,26 @@ async function handleFormSubmit(event: SubmitEvent) {
                 // Lo desactivamos inmediatamente
                 await updateProductStatus(newProduct.id);
             }
+            showNotification("Producto creado con exito.",'success')
         }
 
         closeModal();
         loadInitialData(); // Recarga la tabla
     } catch (error) {
-        alert(`Error al guardar el producto: ${error}`);
+        showNotification(`Error al guardar el producto: ${error}`, 'error')
     }
 }
 
 // Maneja la eliminación
 async function handleDelete(id: number) {
-    if (confirm("¿Estás seguro de que quieres eliminar este producto?")) {
+    const didConfirm = await showConfirmation("¿Estas seguro de que quieres eliminar este producto?","Eliminar Producto","Eliminar")
+    if (didConfirm) {
         try {
             await deleteProduct(id);
             loadInitialData();
+            showNotification("Producto eliminado con exito.",'success')
         } catch (error) {
-            alert(`Error al eliminar el producto: ${error}`);
+            showNotification(`Error al eliminar el producto: ${error}`,'error');
         }
     }
 }
