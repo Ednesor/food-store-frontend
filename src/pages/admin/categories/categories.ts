@@ -1,6 +1,8 @@
 import type { ICategoria } from "@/types/ICategoria";
 import { getCategories, createCategory, updateCategory, deleteCategory } from "@/utils/api";
 import { setupAdminAuth } from "@/utils/auth";
+import { showConfirmation } from "@/utils/confirmation";
+import { showNotification } from "@/utils/notifications";
 
 // Referencias al DOM
 const tableBody = document.getElementById("category-table-body") as HTMLTableSectionElement;
@@ -113,31 +115,39 @@ async function handleFormSubmit(event: SubmitEvent) {
     };
 
     if (!categoryData.nombre || !categoryData.descripcion || !categoryData.urlImagen) {
-        alert("Todos los campos son obligatorios.");
+        showNotification("Todos los campos son obligatorios.", 'error')
         return;
     }
 
     try {
+        // mensaje personalizado
+        let successMessage = "" 
         if (editingCategoryId) {
             await updateCategory(editingCategoryId, categoryData);
+            successMessage = "Categoría actualizada con éxito.";
         } else {
             await createCategory(categoryData);
+            successMessage = "Categoría creada con éxito.";
         }
         closeModal();
         loadAndRenderCategories();
+        showNotification(successMessage,'success')
     } catch (error) {
-        alert(`Error al guardar la categoría: ${error}`);
+        showNotification(`Error al guardar la categoría: ${error}`, 'error');
     }
 }
 
 // Maneja la eliminación de una categoría
 async function handleDelete(id: number) {
-    if (confirm("¿Estás seguro de que quieres eliminar esta categoría?")) {
+    const didConfirm = await showConfirmation("¿Estás seguro de que quieres eliminar esta categoría?","Eliminar Categoria","Eliminar")
+
+    if (didConfirm) {
         try {
             await deleteCategory(id);
             loadAndRenderCategories();
+            showNotification("Categoría eliminada con éxito.", 'success');
         } catch (error) {
-            alert(`Error al eliminar la categoría: ${error}`);
+            showNotification(`Error al eliminar la categoría: ${error}`, 'error');
         }
     }
 }
