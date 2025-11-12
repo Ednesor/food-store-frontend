@@ -1,5 +1,6 @@
 import type { ICartItem } from "@/types/ICart";
 import type { IProduct } from "@/types/IProduct";
+import { showNotification } from "./notifications";
 
 // Esta es la "llave" con la que guardaremos el carrito en localStorage
 const CART_KEY = 'shopping_cart';
@@ -52,13 +53,13 @@ function saveCart(cart: ICartItem[]): void {
 export function addToCart(product: IProduct, quantity: number): void {
     const cart = getCart();
     const existingItem = cart.find(item => item.id === product.id);
-    
+
     // Obtenemos el stock máximo desde el producto
     const stock = product.stock;
 
     if (existingItem) {
         // --- YA EXISTÍA EN EL CARRITO ---
-        
+
         // Calculamos cuál sería el nuevo total
         const newTotalQuantity = existingItem.quantity + quantity;
 
@@ -66,22 +67,21 @@ export function addToCart(product: IProduct, quantity: number): void {
             // Si el nuevo total supera el stock, ajustamos al máximo
             existingItem.quantity = stock;
             // Y avisamos al usuario
-            alert(`¡Stock máximo alcanzado! El stock para ${product.nombre} es ${stock}. Tu carrito ha sido ajustado al máximo.`);
+            showNotification(`Stock máximo (${stock}) alcanzado. Se ajustó tu carrito.`, 'info');
         } else {
             // Si no supera, simplemente actualizamos
             existingItem.quantity = newTotalQuantity;
-            alert(`Añadiste ${quantity} más. Total: ${newTotalQuantity} ${product.nombre} en el carrito.`);
+            showNotification(`Añadiste ${quantity} más. Total: ${newTotalQuantity} en el carrito.`, 'info');
         }
     } else {
         // --- ES UN ITEM NUEVO ---
 
         if (quantity > stock) {
             // Si la cantidad que quiere agregar de golpe es mayor al stock
-            alert(`El stock máximo para ${product.nombre} es ${stock}. Se añadirán solo ${stock} items.`);
-            quantity = stock; // Lo limitamos al stock
+            showNotification(`El stock máximo es ${stock}. Se añadirán solo ${stock} items.`, 'info'); quantity = stock; // Lo limitamos al stock
         } else {
             // Es un item nuevo y la cantidad es válida
-            alert(`¡Añadiste ${quantity} ${product.nombre} al carrito!`);
+            showNotification(`¡Añadiste ${quantity} ${product.nombre} al carrito!`, 'success');
         }
         
         const newItem: ICartItem = {
